@@ -16,7 +16,7 @@ class Course(models.Model):
     tutor = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
     level = models.CharField(max_length=16)
-    # image =
+    image = models.ImageField(null=True, blank=True, upload_to='course_thumbnails')
     # price =
     created_at = models.DateTimeField(auto_now_add=True)
     rating = models.DecimalField(null=True, blank=True, max_digits=7, decimal_places=2)
