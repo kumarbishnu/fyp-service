@@ -2,6 +2,7 @@ courses = [
 	{
 		'id': 'c1',
 		'title': 'Adobe Photoshop Training: From Beginner to Pro',
+		'description': 'Hello World',
 		'category': 'Design',
 		'tutor': {'image': '', 'name': 'Albert Flores'},
 		'price': 0,
@@ -15,6 +16,7 @@ courses = [
 	{
 		'id': 'c2',
 		'title': 'Cat Behaviour, Psychology and Care Training',
+		'description': 'Hello World',
 		'category': 'Lifestyle',
 		'tutor': {'image': '', 'name': 'Darell Steward'},
 		'price': 0,
