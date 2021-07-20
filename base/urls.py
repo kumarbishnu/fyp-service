@@ -11,4 +11,5 @@ urlpatterns = [
 
     path('user/profile/', views.get_user_profile, name='user_profile'),
     path('user/login/', views.MyTokenObtainPairView.as_view(), name='login'),
+    path('user/register/', views.register_user, name='register_user')
 ]
