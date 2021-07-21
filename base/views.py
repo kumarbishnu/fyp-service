@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from rest_framework import status
@@ -50,7 +52,28 @@ def register_user(request):
 @permission_classes([IsAuthenticated])
 def get_user_profile(request):
     user = request.user
-    serializer = UserSerializer(user, many=False)
+    serializer = ProfileSerializer(user, many=False)
+    return Response(serializer.data)
+
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def update_profile(request):
+    data = request.data
+
+    user = request.user
+    profile = user.profile
+
+    user.first_name = data['name']
+    profile.phone = data['phone']
+    profile.address = data['address']
+    profile.gender = data['gender']
+    profile.dob = data['dob']
+
+    user.save()
+    profile.save()
+
+    serializer = ProfileSerializer(user, many=False)
     return Response(serializer.data)
 
 

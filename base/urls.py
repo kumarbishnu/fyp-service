@@ -10,6 +10,7 @@ urlpatterns = [
     path('courses/<pk>', views.get_course, name='course'),
 
     path('user/profile/', views.get_user_profile, name='user_profile'),
+    path('user/profile/update/', views.update_profile, name='update_profile'),
     path('user/login/', views.MyTokenObtainPairView.as_view(), name='login'),
     path('user/register/', views.register_user, name='register_user')
 ]

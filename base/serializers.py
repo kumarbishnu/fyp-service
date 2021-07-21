@@ -34,6 +34,19 @@ class UserSerializerWithToken(UserSerializer):
         return str(token.access_token)
 
 
+class ProfileSerializer(UserSerializer):
+    phone = serializers.CharField(source='profile.phone')
+    address = serializers.CharField(source='profile.address')
+    gender = serializers.CharField(source='profile.gender')
+    dob = serializers.CharField(source='profile.dob')
+    image = serializers.CharField(source='profile.image.url')
+
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'name', 'is_tutor',
+                  'phone', 'address', 'gender', 'dob', 'image']
+
+
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
@@ -41,9 +54,11 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class TutorSerializer(UserSerializer):
+    image = serializers.CharField(source='profile.image.url')
+
     class Meta:
         model = User
-        fields = ['name', 'email']
+        fields = ['name', 'image']
 
 
 class CourseSerializer(serializers.ModelSerializer):
