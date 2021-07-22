@@ -85,3 +85,12 @@ def get_user_courses(request):
         courses = Course.objects.filter(enrollment__student_id=user.id)
     serializer = CourseSerializer(courses, many=True)
     return Response(serializer.data)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def upload_user_image(request):
+    profile = request.user.profile
+    profile.image = request.FILES.get('image')
+    profile.save()
+    return Response('Image Uploaded')

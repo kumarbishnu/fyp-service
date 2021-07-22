@@ -1,4 +1,4 @@
-from .models import Course, Enrollment
+from .models import Course, Enrollment, Lecture
 from .serializers import CourseSerializer, CourseSerializerWithContent
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -28,3 +28,23 @@ def get_course_content(request, pk):
         serializer = CourseSerializerWithContent(course, many=False)
         return Response(serializer.data)
     return Response('Invalid Data')
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def upload_course_image(request):
+    data = request.data
+    course = Course.objects.get(pk=data['course'])
+    course.image = request.FILES.get('image')
+    course.save()
+    return Response('Image Uploaded')
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def upload_lecture_file(request):
+    data = request.data
+    lecture = Lecture.objects.get(pk=data['lecture'])
+    lecture.file_content = request.FILES.get('file')
+    lecture.save()
+    return Response('File Uploaded')
