@@ -38,3 +38,41 @@ class Course(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Enrollment(models.Model):
+    student = models.ForeignKey(User, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    enrolled_on = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return self.student.username + ' - ' + self.course.title
+
+
+class Chapter(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    number = models.IntegerField()
+    title = models.CharField(max_length=256)
+
+    def __str__(self):
+        return self.title
+
+
+class Lecture(models.Model):
+    chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE)
+    number = models.IntegerField()
+    title = models.CharField(max_length=256)
+    text_content = models.TextField(null=True, blank=True)
+    file_content = models.FileField(null=True, blank=True, upload_to='lecture_files')
+
+    def __str__(self):
+        return self.title
+
+
+class Resource(models.Model):
+    lecture = models.ForeignKey(Lecture, on_delete=models.CASCADE)
+    display_name = models.CharField(max_length=256, null=True, blank=True)
+    url = models.URLField(null=True, blank=True)
+
+    def __str__(self):
+        return self.display_name

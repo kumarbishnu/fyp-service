@@ -78,6 +78,18 @@ def update_profile(request):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_user_courses(request):
+    user = request.user
+    if user.is_staff:
+        courses = user.course_set.all()
+    else:
+        courses = Course.objects.filter(enrollment__student_id=user.id)
+    serializer = CourseSerializer(courses, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
 def get_routes(request):
     routes = [
         '/api/categories/',
@@ -107,3 +119,14 @@ def get_course(request, pk):
     course = Course.objects.get(id=pk)
     serializer = CourseSerializer(course, many=False)
     return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_course_content(request, pk):
+    user = request.user
+    course = Course.objects.get(pk=pk)
+    if (user.is_staff and course.tutor == user) or (not user.is_staff and Enrollment.objects.get(course=course, student=user)):
+        serializer = CourseSerializerWithContent(course, many=False)
+        return Response(serializer.data)
+    return Response('Invalid Data')
