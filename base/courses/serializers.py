@@ -18,6 +18,7 @@ class TutorSerializer(UserSerializer):
 
 
 class CourseSerializer(serializers.ModelSerializer):
+    category_id = serializers.CharField(source='category.id')
     category = serializers.CharField(source='category.name')
     tutor = TutorSerializer(many=False)
 
