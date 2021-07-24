@@ -21,21 +21,9 @@ def get_course(request, pk):
 
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
 def get_course_content(request, pk):
-    user = request.user
     course = Course.objects.get(pk=pk)
-    if user.is_staff:
-        if course.tutor == user:
-            serializer = CourseSerializerWithContent(course, many=False)
-        else:
-            return Response('You do not own this course.')
-    else:
-        try:
-            Enrollment.objects.get(course=course, student=user)
-            serializer = CourseSerializerWithContent(course, many=False)
-        except ObjectDoesNotExist:
-            return Response('You do not own this course.')
+    serializer = CourseSerializerWithContent(course, many=False)
     return Response(serializer.data)
 
 
@@ -141,7 +129,7 @@ def delete_chapter(request, pk):
 def create_lecture(request):
     data = request.data
     lecture = Lecture.objects.create(
-        course=Chapter.objects.get(pk=data['chapter']),
+        chapter=Chapter.objects.get(pk=data['chapter']),
         number=data['number'],
         title=data['title'],
         text_content=data['text_content'],
@@ -202,3 +190,14 @@ def delete_resource(request, pk):
     resource = Resource.objects.get(pk=pk)
     resource.delete()
     return Response('Resource Deleted!')
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def enroll(request, pk):
+    user = request.user
+    course = Course.objects.get(pk=pk)
+    Enrollment.objects.create(course=course, student=user)
+    course.student_count += 1
+    course.save()
+    return Response('Success')
