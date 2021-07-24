@@ -143,6 +143,9 @@ def create_lecture(request):
         title=data['title'],
         text_content=data['text_content'],
     )
+    course = lecture.chapter.course
+    course.lecture_count += 1
+    course.save()
     serializer = LectureSerializer(lecture, many=False)
     return Response(serializer.data)
 
@@ -165,6 +168,9 @@ def update_lecture(request):
 def delete_lecture(request, pk):
     lecture = Lecture.objects.get(pk=pk)
     lecture.delete()
+    course = lecture.chapter.course
+    course.lecture_count -= 1
+    course.save()
     return Response('Lecture Deleted!')
 
 
@@ -173,7 +179,7 @@ def delete_lecture(request, pk):
 def create_resource(request):
     data = request.data
     resource = Resource.objects.create(
-        course=Lecture.objects.get(pk=data['lecture']),
+        lecture=Lecture.objects.get(pk=data['lecture']),
         display_name=data['display_name'],
         url=data['url'],
     )
