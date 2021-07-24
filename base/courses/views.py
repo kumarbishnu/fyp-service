@@ -8,7 +8,16 @@ from rest_framework.response import Response
 
 @api_view(['GET'])
 def get_courses(request):
+    query = request.query_params.get('keyword')
+    category = request.query_params.get('category')
+    top = request.query_params.get('top')
     courses = Course.objects.all()
+    if category:
+        courses = courses.filter(category_id=category)
+    if query:
+        courses = courses.filter(title__icontains=query)
+    if top:
+        courses = Course.objects.all().order_by('-student_count')[:8]
     serializer = CourseSerializer(courses, many=True)
     return Response(serializer.data)
 
