@@ -1,3 +1,4 @@
+from .models import Profile
 from .serializers import ProfileSerializer, UserSerializerWithToken
 from base.courses.models import Course
 from base.courses.serializers import CourseSerializer
@@ -39,6 +40,7 @@ def register_user(request):
             password=make_password(data['password']),
             is_staff=is_tutor
         )
+        Profile.objects.create(user=user)
         serializer = UserSerializerWithToken(user, many=False)
         return Response(serializer.data)
     except:

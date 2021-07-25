@@ -18,7 +18,7 @@ class Course(models.Model):
     image = models.ImageField(null=True, blank=True, upload_to='course_thumbnails')
     # price =
     created_at = models.DateTimeField(auto_now_add=True)
-    rating = models.DecimalField(null=True, blank=True, max_digits=7, decimal_places=2)
+    rating = models.DecimalField(null=True, blank=True, max_digits=7, decimal_places=2, default=0.0)
     review_count = models.IntegerField(null=True, blank=True, default=0)
     lecture_count = models.IntegerField(null=True, blank=True, default=0)
     student_count = models.IntegerField(null=True, blank=True, default=0)
